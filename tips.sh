@@ -1,37 +1,49 @@
 #!/bin/bash
 
-#TOTD_HTTP=1 # Configuration - set to 1, if tips from the server ...
-CURTIP=`cat ~/.curtip`
+# Configuration - set to 1, if tips are loaded from the server...
+TOTD_HTTP=1
 
-# If no value in the current index file, start from start
-if [ -z $CURTIP ] ; then
-  CURTIP=1
-fi
-
+# Default tips directory
 TIPREPO=~/tips
 
-if [ $TOTD_HTTP ] ; then
-  TIPLABEL="HTTP $CURTIP"
-  NUMTIPS=8 # This is not very clever and should be improved!
-else
-  NUMTIPS=`ls $TIPREPO/*.txt | wc -l`
-  TIPLABEL="$TIPREPO/$CURTIP.txt"
+# If no tips folder found in users home directory,
+# use folder in current working directory
+if [ ! -d $TIPREPO ] ; then
+  TIPREPO=./tips
 fi
 
+TIPS=()
+
+# Loop through files in a folder and
+# save them to $TIPS array
+for file in "$TIPREPO"/*
+do
+  # Capture file name only without path
+  TIPS+=( "${file##*/}" )
+done
+
+# Get a random index 
+rand=$[$RANDOM % ${#TIPS[@]}]
+
+# Select tip file
+SELECTED_TIP=${TIPS[$rand]}
+
+# Create label
+if [ $TOTD_HTTP -eq 1 ] ; then
+  TIPLABEL="HTTP $SELECTED_TIP"
+else
+  TIPLABEL="$TIPREPO/$SELECTED_TIP"
+fi
+
+# Print out the tip
 echo
 echo "================================================"
 echo " TIP OF TODAY ($TIPLABEL) "
 echo "------------------------------------------------"
-if [ $TOTD_HTTP ] ; then
-  curl http://192.168.3.16/tips/$CURTIP.txt 2>/dev/null
+if [ $TOTD_HTTP -eq 1 ] ; then
+  curl http://192.168.3.16/tips/$SELECTED_TIP 2>/dev/null
 else
-  cat $TIPREPO/$CURTIP.txt
+  cat $TIPREPO/$SELECTED_TIP
 fi
 echo "================================================"
 echo
-
-NEXT=`expr $CURTIP % $NUMTIPS`
-NEXT=`expr $NEXT + 1`
-
-echo $NEXT > ~/.curtip
-
