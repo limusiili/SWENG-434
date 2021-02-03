@@ -11,24 +11,24 @@ To deploy this in your environment
 0) No warranty. Do this in your own responsibility.
 
 1) Place the contents of this repo somewhere in your homedirectory:
-```
+```bash
 $ cd
 $ mkdir tools
 $ cd tools
 $ git clone <this repo>
 ```
 2) Create a symbolic link to the tips diretory in your home directory:
-```
+```bash
 $ cd
 $ ln -s tools/tips
 ```
 3) Add calling for the script to the end of the .bashrc file of your home directory:
-```
+```bash
 $ cd 
-$ echo "sh tools/gittips/tips.sh" >> .basrch
+$ echo "./tools/gittips/tips.sh" >> .basrch
 ```
 4) Try out
-```
+```bash
 $ cd
 $ source .bashrc
 ```
