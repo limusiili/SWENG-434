@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration - set to 1, if tips are loaded from the server...
-TOTD_HTTP=1
+TOTD_HTTP=0
 
 # Default tips directory
 TIPREPO=~/tips
