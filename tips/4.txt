@@ -1,3 +1,0 @@
-# Third tip 
-Use git
-Git gud
