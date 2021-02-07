@@ -21,7 +21,6 @@ do
   # Capture file name only without path
   TIPS+=( "${file##*/}" )
 done
-
 # Get a random index 
 rand=$[$RANDOM % ${#TIPS[@]}]
 
@@ -43,7 +42,16 @@ echo "------------------------------------------------"
 if [ $TOTD_HTTP -eq 1 ] ; then
   curl http://192.168.3.16/tips/$SELECTED_TIP 2>/dev/null
 else
-  cat $TIPREPO/$SELECTED_TIP
+  if [ "$SELECTED_TIP" == lista.txt ] ; then 	
+	# For some reason tr -d '\r' is needed, second shuf command will override 
+	# first ones data otherwise
+	FIRST_WORD=$(shuf -n 1 $TIPREPO/"lista.txt" | tr -d '\r')
+	SECOND_WORD=$(shuf -n 1 $TIPREPO/"lista.txt" | tr -d '\r')
+	echo "$FIRST_WORD on $SECOND_WORD"
+  else
+	cat $TIPREPO/$SELECTED_TIP
+  fi
+  
 fi
 echo "================================================"
 echo
